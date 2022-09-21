@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.UI;
 
 namespace PathFinding.Scripts.UIManagers
 {
@@ -34,6 +35,7 @@ namespace PathFinding.Scripts.UIManagers
         TileScriptableObject m_TileStructuresContainer;
 
         public static Pathfinding pathfinding => m_Pathfinding;
+        public static GridLayout unifiedGrid => m_UnifiedGrid;
         public static event Action OnPathfindingChanged;
 
         public static GameObject FindBestTarget(Vector3 positionWithDelta, params GameObject[] gameObjects)
@@ -116,6 +118,11 @@ namespace PathFinding.Scripts.UIManagers
 
         void UpdateWall(Tilemap tilemap, Tilemap.SyncTile[] changedTiles)
         {
+            if (tilemap != m_ColliderTilemap)
+            {
+                return;
+            }
+            
             var grid = m_Pathfinding.NodeGrid;
             var wallTileLists = m_TileStructuresContainer.tileDataStructures.Where(tileData =>
                 tileData.TileType == TileType.Obstacle || tileData.TileType == TileType.Water).Select(tileDataStructure => tileDataStructure.Tiles);
@@ -142,10 +149,6 @@ namespace PathFinding.Scripts.UIManagers
                 if (wallTiles.Contains(tile.tile))
                 {
                     gridTile.isWalkable = false;
-                }
-                else
-                {
-                    gridTile.isWalkable = true;
                 }
             }
         }

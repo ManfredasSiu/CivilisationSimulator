@@ -22,6 +22,7 @@ public class PathNode
     public float percentileSlowness => PathfindingConstants.k_MoveDiagonaltBaseCost/ moveDiagonalCost;
 
     public bool isWalkable;
+    public bool isDoor;
     public PathNode previousNode;
 
     public PathNode(GenericGrid<PathNode> grid, int x, int y)
