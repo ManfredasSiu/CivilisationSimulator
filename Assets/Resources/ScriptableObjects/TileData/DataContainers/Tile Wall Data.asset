@@ -20,6 +20,8 @@ MonoBehaviour:
   - TileType: 1
     Tiles:
     - {fileID: 11400000, guid: 251adb32260a86f4dad0ef1b853fe228, type: 2}
+    - {fileID: 11400000, guid: 9503276a095e4f04a8f01760e33d5c2a, type: 2}
+    - {fileID: 11400000, guid: 9b32b4c3aff1f88469db36deb761314d, type: 2}
     SlownessIndicator: 0
   - TileType: 4
     Tiles:
