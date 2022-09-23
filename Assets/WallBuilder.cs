@@ -40,12 +40,16 @@ public class WallBuilder : MonoBehaviour
                 return;
             }
 
-            var newWall = new Wall(tilePos, wallTile);
+            var wallObject = Instantiate(wallTile, m_MapData.colliderObjectContainer.transform);
+            
+            wallObject.transform.position = PathfindingManager.tilemapGrid.CellToWorld(tilePos);
+
+            var newWall = new Wall(tilePos, wallObject);
             
             m_WallList.Add(newWall);
             
-            m_ColliderTileMap.SetObject(tilePos, wallTile);
-            
+            m_ColliderTileMap.SetObject(tilePos, wallObject);
+
             Debug.Log(tilePos);
         }
         
@@ -54,7 +58,7 @@ public class WallBuilder : MonoBehaviour
             var mousePos = m_MainCam.ScreenToWorldPoint(Mouse.current.position.ReadValue());
 
             var tilePos = new Vector3Int(Mathf.FloorToInt(mousePos.y), Mathf.FloorToInt(mousePos.x), 0);
-
+            
             if (!m_ColliderTileMap.HasObject(tilePos) && m_WallList.All(wall => wall.tilePos != tilePos))
             {
                 return;
