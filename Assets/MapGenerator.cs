@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DefaultNamespace;
 using PathFinding.Scripts.UIManagers;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -39,10 +40,10 @@ public class MapGenerator : MonoBehaviour
         var height = m_GridData.mapHeight;
         
         var pathTilemap = m_GridData.pathTileMap;
-        var colliderTileMap = m_GridData.colliderTileMap;
+        var colliderTileMap = m_GridData.colliderObjectContainer;
         
         var pathTiles = new Tuple<List<Vector3Int>, List<TileBase>>(new List<Vector3Int>(), new List<TileBase>());
-        var colliderTiles = new Tuple<List<Vector3Int>, List<TileBase>>(new List<Vector3Int>(), new List<TileBase>());
+        var colliderTiles = new Tuple<List<Vector3Int>, List<GameObject>>(new List<Vector3Int>(), new List<GameObject>());
         
         for (int xCoord = 0; xCoord < width; xCoord++)
         {
@@ -54,14 +55,14 @@ public class MapGenerator : MonoBehaviour
                 {
                     if (perlinNoise <= tileData.percentage)
                     {
-                        //if (tileData.prefab != null)
-                        if(m_GridData.tileStructuresContainer.tileDataStructures.Any(structure =>
-                               (structure.TileType == TileType.Obstacle || structure.TileType == TileType.Water) && structure.Tiles.Contains(tileData.tile)))
+                        if (tileData.prefab != null)
                         {
-                            colliderTiles.Item1.Add(new Vector3Int(xCoord, yCoord, 0));
-                            colliderTiles.Item2.Add(tileData.tile);
-                            // var obstacleObject = Instantiate(tileData.prefab, this.transform);
-                            // obstacleObject.transform.position = PathfindingManager.unifiedGrid.CellToWorld(new Vector3Int(xCoord, yCoord, 0));
+                            var obstacleObject = Instantiate(tileData.prefab, m_GridData.colliderObjectContainer.transform);
+                            var currentPosInGrid = new Vector3Int(xCoord, yCoord, 0);
+                            obstacleObject.transform.position = PathfindingManager.tilemapGrid.CellToWorld(currentPosInGrid);
+                            
+                            colliderTiles.Item1.Add(currentPosInGrid);
+                            colliderTiles.Item2.Add(obstacleObject);
                             break;
                         }
                         else
@@ -75,8 +76,8 @@ public class MapGenerator : MonoBehaviour
             }
         }
         
+        colliderTileMap.SetObjects(colliderTiles.Item1.ToArray(), colliderTiles.Item2.ToArray());
         pathTilemap.SetTiles(pathTiles.Item1.ToArray(),pathTiles.Item2.ToArray());
-        colliderTileMap.SetTiles(colliderTiles.Item1.ToArray(),colliderTiles.Item2.ToArray());
     }
 
     float GetPerlinNoise(int x, int y)

@@ -13,13 +13,13 @@ public class WallBuilder : MonoBehaviour
     [SerializeField]
     MapGridDataManager m_MapData;
     
-    public TileBase WallTile;
+    public GameObject wallTile;
 
     List<Wall> m_WallList;
 
     Camera m_MainCam;
     
-    Tilemap m_ColliderTileMap => m_MapData.colliderTileMap;
+    ObjectMap m_ColliderTileMap => m_MapData.colliderObjectContainer;
     
     void Start()
     {
@@ -35,16 +35,16 @@ public class WallBuilder : MonoBehaviour
 
             var tilePos = new Vector3Int(Mathf.FloorToInt(mousePos.y), Mathf.FloorToInt(mousePos.x), 0);
 
-            if (m_ColliderTileMap.HasTile(tilePos))
+            if (m_ColliderTileMap.HasObject(tilePos))
             {
                 return;
             }
 
-            var newWall = new Wall(tilePos, WallTile);
+            var newWall = new Wall(tilePos, wallTile);
             
             m_WallList.Add(newWall);
             
-            m_ColliderTileMap.SetTile(tilePos, WallTile);
+            m_ColliderTileMap.SetObject(tilePos, wallTile);
             
             Debug.Log(tilePos);
         }
@@ -55,7 +55,7 @@ public class WallBuilder : MonoBehaviour
 
             var tilePos = new Vector3Int(Mathf.FloorToInt(mousePos.y), Mathf.FloorToInt(mousePos.x), 0);
 
-            if (!m_ColliderTileMap.HasTile(tilePos) && m_WallList.All(wall => wall.tilePos != tilePos))
+            if (!m_ColliderTileMap.HasObject(tilePos) && m_WallList.All(wall => wall.tilePos != tilePos))
             {
                 return;
             }
@@ -64,7 +64,7 @@ public class WallBuilder : MonoBehaviour
             
             m_WallList.Remove(wallToRemove);
             
-            m_ColliderTileMap.SetTile(tilePos, null);
+            m_ColliderTileMap.SetObject(tilePos, null);
             
             Debug.Log(tilePos);
         }

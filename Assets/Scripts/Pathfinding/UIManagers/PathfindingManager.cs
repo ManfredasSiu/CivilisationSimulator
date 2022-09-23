@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DefaultNamespace;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
@@ -11,7 +12,7 @@ namespace PathFinding.Scripts.UIManagers
     {
         static Pathfinding m_Pathfinding;
 
-        static GridLayout m_UnifiedGrid; 
+        static GridLayout m_TilemapGrid; 
 
         [SerializeField] 
         Vector3 m_OriginPosition = Vector3.zero;
@@ -21,13 +22,13 @@ namespace PathFinding.Scripts.UIManagers
 
         [SerializeField] 
         float m_CellSize;
+        
+        public static event Action OnPathfindingChanged;
 
-        [SerializeField] 
-        Tilemap m_PathTilemap;
+        Tilemap m_PathTilemap => m_MapData.pathTileMap;
         
-        [SerializeField] 
-        Tilemap m_ColliderTilemap;
-        
+        ObjectMap m_ColliderTileMap => m_MapData.colliderObjectContainer;
+
         TileScriptableObject m_TileStructuresContainer => m_MapData.tileStructuresContainer;
         
         int m_Width => m_MapData.mapWidth;
@@ -35,8 +36,7 @@ namespace PathFinding.Scripts.UIManagers
         int m_Height => m_MapData.mapHeight;
         
         public static Pathfinding pathfinding => m_Pathfinding;
-        public static GridLayout unifiedGrid => m_UnifiedGrid;
-        public static event Action OnPathfindingChanged;
+        public static GridLayout tilemapGrid => m_TilemapGrid;
         public static event Action<List<PathNode>> OnPathfindingEdited;
 
         public static GameObject FindBestTarget(Vector3 positionWithDelta, params GameObject[] gameObjects)
@@ -62,100 +62,37 @@ namespace PathFinding.Scripts.UIManagers
 
             return bestGameObject;
         }
-        
-        public static List<Vector3> FindBoundingTileCoordinates(GameObject target)
-        {
-            var tagetGameObject = target;
 
-            var lowerLeftPos = tagetGameObject.transform.position - new Vector3(pathfinding.NodeGrid.CellSize, pathfinding.NodeGrid.CellSize);
-            var upperRightPos = lowerLeftPos + tagetGameObject.transform.localScale + new Vector3(pathfinding.NodeGrid.CellSize, pathfinding.NodeGrid.CellSize);;
-
-            var boundingNodes = pathfinding.GetBoundingNodes(lowerLeftPos, upperRightPos);
-
-            var vectorList = new List<Vector3>();
-            foreach (var node in boundingNodes)
-            {
-                if (node.isWalkable)
-                {
-                    vectorList.Add(pathfinding.GetNodeCenterPosition(node));
-                }
-            }
-
-            return vectorList;
-        }
-        
         void Awake()
         {
-            if (m_PathTilemap.transform.parent != m_ColliderTilemap.transform.parent)
-            {
-                Debug.LogError("Tilemaps have different parents, unified grid cannot be found");
-                return;
-            }
-            else
-            {
-                m_UnifiedGrid = m_PathTilemap.transform.parent.GetComponentInParent<GridLayout>();
-            }
+            m_TilemapGrid = m_PathTilemap.transform.parent.GetComponentInParent<GridLayout>();
             
-            if (m_PathTilemap != null || m_ColliderTilemap != null)
+            if (m_ColliderTileMap != null)
             {
-                Tilemap.tilemapTileChanged += UpdateWall;
+                m_MapData.colliderObjectContainer.ObjectMapEdited += UpdateWall;
             }
-            
-            BuildingPlacer.RaiseBuildingPlacedEvent += UpdateGridWalkability;
-            
+
             m_Pathfinding = CreatePathfinding();
         }
 
-        void UpdateGridWalkability(object sender, BuildingPlacedEvent e)
+        void UpdateWall(Vector3Int[] posArray, GameObject[] objArray)
         {
-            var buildingGameObject = e.Building;
-
-            var lowerLeftPos = buildingGameObject.transform.position;
-            var upperRightPos = lowerLeftPos + buildingGameObject.transform.localScale;
-            pathfinding.SetWalkable(lowerLeftPos, upperRightPos, false);
-            
-            OnPathfindingChanged?.Invoke();
-        }
-
-        void UpdateWall(Tilemap tilemap, Tilemap.SyncTile[] changedTiles)
-        {
-            if (tilemap != m_ColliderTilemap)
-            {
-                return;
-            }
-            
             var grid = m_Pathfinding.NodeGrid;
-            var wallTileLists = m_TileStructuresContainer.tileDataStructures.Where(tileData =>
-                tileData.TileType == TileType.Obstacle || tileData.TileType == TileType.Water).Select(tileDataStructure => tileDataStructure.Tiles);
-
-            var tileLists = wallTileLists.ToList();
-            
-            if (!tileLists.Any())
-            {
-                return;
-            }
-
-            var wallTiles = new List<TileBase>();
-            
-            foreach (var tileList in tileLists)
-            {
-                wallTiles.AddRange(tileList);
-            }
 
             var changedCells = new List<PathNode>();
-            
-            foreach (var tile in changedTiles)
+
+            for (var x = 0; x < posArray.Length; x++)
             {
-                var worldPos = m_UnifiedGrid.CellToWorld(tile.position);
+                var worldPos = m_TilemapGrid.CellToWorld(posArray[x]);
                 
                 var gridTile = grid.GetGridObject(worldPos);
              
-                if (tile.tile == null)
+                if (objArray[x] == null)
                 {
                     gridTile.isWalkable = true;
                     changedCells.Add(gridTile);
                 }
-                else if (wallTiles.Contains(tile.tile))
+                else
                 {
                     gridTile.isWalkable = false;
                     changedCells.Add(gridTile);
@@ -174,10 +111,6 @@ namespace PathFinding.Scripts.UIManagers
             var grid = currentPathFinding.NodeGrid;
             
             var tileStructures = m_TileStructuresContainer.tileDataStructures;
-            
-            var wallTileLists = tileStructures.Where(tileData => tileData.TileType == TileType.Obstacle || tileData.TileType == TileType.Water)
-                .Select(tileDataStructure => tileDataStructure.Tiles)
-                .SelectMany(x => x);
 
             var slownessStructure = tileStructures.First(tileData => tileData.TileType == TileType.Ground_Slow);
             
@@ -188,17 +121,17 @@ namespace PathFinding.Scripts.UIManagers
                 for (var y = m_OriginPosition.y; y < m_Height+m_OriginPosition.y; y++)
                 {
                     var worldPos = new Vector3(x, y, m_OriginPosition.z);
-                    var cellPosition = m_UnifiedGrid.WorldToCell(worldPos);
+                    var cellPosition = m_TilemapGrid.WorldToCell(worldPos);
                     
                     var pathTile = m_PathTilemap.GetTile(Vector3Int.FloorToInt(cellPosition));
-                    var colliderTile = m_ColliderTilemap.GetTile(Vector3Int.FloorToInt(cellPosition));
+                    var colliderTile = m_ColliderTileMap.GetObject(Vector3Int.FloorToInt(cellPosition));
                     
-                    if (wallTileLists.Contains(colliderTile))
+                    if (colliderTile != null)
                     {
                         grid.GetGridObject(worldPos).isWalkable = false;
                     }
 
-                    if (slownessTiles.Contains(pathTile))
+                    else if (slownessTiles.Contains(pathTile))
                     {
                         grid.GetGridObject(worldPos).ApplySlowness(slownessStructure.SlownessIndicator);
                     }
