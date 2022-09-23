@@ -39,7 +39,7 @@ public class MapGenerator : MonoBehaviour
         var height = m_GridData.mapHeight;
         
         var pathTilemap = m_GridData.pathTileMap;
-        var colliderTileMap = m_GridData.colliderTileMap;
+        var colliderTileMap = m_GridData.colliderTilemap;
         
         var pathTiles = new Tuple<List<Vector3Int>, List<TileBase>>(new List<Vector3Int>(), new List<TileBase>());
         var colliderTiles = new Tuple<List<Vector3Int>, List<TileBase>>(new List<Vector3Int>(), new List<TileBase>());

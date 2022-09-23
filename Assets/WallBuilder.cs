@@ -19,7 +19,7 @@ public class WallBuilder : MonoBehaviour
 
     Camera m_MainCam;
     
-    Tilemap m_ColliderTileMap => m_MapData.colliderTileMap;
+    Tilemap m_ColliderTileMap => m_MapData.colliderTilemap;
     
     void Start()
     {
