@@ -12,3 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: defc8216e41343869fa61e107fac96dc, type: 3}
   m_Name: Map Data
   m_EditorClassIdentifier: 
+  mapTiles:
+  - percentage: 0.205
+    tile: {fileID: 11400000, guid: abc724add534f4e48b02ab31e524f01f, type: 2}
+  - percentage: 0.59
+    tile: {fileID: 11400000, guid: 01a43b93edea72d47a79db52bf654e61, type: 2}
+  - percentage: 1
+    tile: {fileID: 11400000, guid: 9b32b4c3aff1f88469db36deb761314d, type: 2}
