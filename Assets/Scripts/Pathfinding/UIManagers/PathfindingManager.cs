@@ -15,12 +15,9 @@ namespace PathFinding.Scripts.UIManagers
 
         [SerializeField] 
         Vector3 m_OriginPosition = Vector3.zero;
-        
-        [SerializeField] 
-        int m_Width;
 
-        [SerializeField] 
-        int m_Height;
+        [SerializeField]
+        MapGridDataManager m_MapData;
 
         [SerializeField] 
         float m_CellSize;
@@ -30,13 +27,17 @@ namespace PathFinding.Scripts.UIManagers
         
         [SerializeField] 
         Tilemap m_ColliderTilemap;
+        
+        TileScriptableObject m_TileStructuresContainer => m_MapData.tileStructuresContainer;
+        
+        int m_Width => m_MapData.mapWidth;
 
-        [SerializeField] 
-        TileScriptableObject m_TileStructuresContainer;
-
+        int m_Height => m_MapData.mapHeight;
+        
         public static Pathfinding pathfinding => m_Pathfinding;
         public static GridLayout unifiedGrid => m_UnifiedGrid;
         public static event Action OnPathfindingChanged;
+        public static event Action<List<PathNode>> OnPathfindingEdited;
 
         public static GameObject FindBestTarget(Vector3 positionWithDelta, params GameObject[] gameObjects)
         {
@@ -140,16 +141,30 @@ namespace PathFinding.Scripts.UIManagers
             {
                 wallTiles.AddRange(tileList);
             }
+
+            var changedCells = new List<PathNode>();
             
             foreach (var tile in changedTiles)
             {
                 var worldPos = m_UnifiedGrid.CellToWorld(tile.position);
                 
                 var gridTile = grid.GetGridObject(worldPos);
-                if (wallTiles.Contains(tile.tile))
+             
+                if (tile.tile == null)
+                {
+                    gridTile.isWalkable = true;
+                    changedCells.Add(gridTile);
+                }
+                else if (wallTiles.Contains(tile.tile))
                 {
                     gridTile.isWalkable = false;
+                    changedCells.Add(gridTile);
                 }
+            }
+
+            if (changedCells.Any())
+            {
+                OnPathfindingEdited?.Invoke(changedCells);
             }
         }
 

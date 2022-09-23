@@ -378,6 +378,7 @@ Transform:
   - {fileID: 1185104100}
   - {fileID: 1993357455}
   - {fileID: 472526709}
+  - {fileID: 862006115}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -390,8 +391,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 472526709}
+  - component: {fileID: 472526712}
   - component: {fileID: 472526708}
   - component: {fileID: 472526710}
+  - component: {fileID: 472526711}
   m_Layer: 6
   m_Name: GridManager
   m_TagString: Untagged
@@ -412,12 +415,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_OriginPosition: {x: 0, y: 0, z: 0}
-  m_Width: 50
-  m_Height: 50
+  m_MapData: {fileID: 472526712}
   m_CellSize: 1
   m_PathTilemap: {fileID: 2127346043}
   m_ColliderTilemap: {fileID: 1993357458}
-  m_TileStructuresContainer: {fileID: 11400000, guid: 6c054eb545608964699c4d064ed90bb2, type: 2}
 --- !u!4 &472526709
 Transform:
   m_ObjectHideFlags: 0
@@ -444,7 +445,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9302230d0f3554e4abeb2b02e78ec212, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colliderTilemap: {fileID: 1993357458}
+  paintRooms: 1
+--- !u!114 &472526711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 472526707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bb15d1cbe6efec489cd325149b00237, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_GridData: {fileID: 472526712}
+  m_MapData: {fileID: 11400000, guid: a78a762664b05fc45a9d9df7c9ccb6be, type: 2}
+  m_OffsetX: 0
+  m_OffsetY: 0
+  m_Magnification: 50
+--- !u!114 &472526712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 472526707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81d10df71c234d7e81e7a0bab359e72a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ColliderTileMap: {fileID: 1993357458}
+  m_PathTileMap: {fileID: 2127346043}
+  m_TileStructuresContainer: {fileID: 11400000, guid: 6c054eb545608964699c4d064ed90bb2, type: 2}
+  m_MapWidth: 150
+  m_MapHeight: 150
 --- !u!1 &518575021
 GameObject:
   m_ObjectHideFlags: 0
@@ -812,8 +847,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b1bbacd2540b1a43bbc01bd68aebdc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ObstaclesTileMap: {fileID: 1993357458}
-  PathTilemap: {fileID: 2127346043}
+  m_MapData: {fileID: 472526712}
   WallTile: {fileID: 11400000, guid: 9503276a095e4f04a8f01760e33d5c2a, type: 2}
 --- !u!4 &862006115
 Transform:
@@ -822,12 +856,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 862006113}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_Father: {fileID: 134703844}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &884714914
 GameObject:

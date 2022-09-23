@@ -1,5 +1,6 @@
 ﻿using CodeMonkey.Utils;
 using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -26,13 +27,28 @@ namespace Assets.Grid.Scripts.Map.Logic
         
         public float CellSize => m_CellSize;
 
+        public List<TGridObject> GetAllCellList()
+        {
+            var cellList = new List<TGridObject>();
+
+            for(int x= 0;x < m_GridArray.GetLength(0);x++)
+            {
+                for(int y = 0; y < m_GridArray.GetLength(1);y++)
+                {
+                    cellList.Add(m_GridArray[x, y]);
+                }
+            }
+
+            return cellList;
+        }
+
         public GenericGrid(int width, int height, float cellSize, Vector3 originPos, Func<GenericGrid<TGridObject>, int, int,TGridObject> createGridObject)
         {
             m_Width = width;
             m_Height = height;
             m_CellSize = cellSize;
             m_OriginPos = originPos;
-
+            
             m_GridArray = new TGridObject[width, height];
             m_DebugTextArray = new TextMesh[width, height];
 

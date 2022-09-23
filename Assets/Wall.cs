@@ -7,11 +7,13 @@ namespace DefaultNamespace
     {
         TileBase m_WallType;
 
-        Vector3Int[] m_OccupyingTiles;
+        Vector3Int m_OccupyingTile;
+
+        public Vector3Int tilePos => m_OccupyingTile;
         
-        public Wall(Vector3Int[] occupyingTiles, TileBase wallType)
+        public Wall(Vector3Int occupyingTile, TileBase wallType)
         {
-            m_OccupyingTiles = occupyingTiles;
+            m_OccupyingTile = occupyingTile;
             m_WallType = wallType;
         }
     }

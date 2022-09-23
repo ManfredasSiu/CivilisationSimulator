@@ -9,4 +9,6 @@ public class MapTile
     public float percentage;
 
     public TileBase tile;
+
+    public GameObject prefab;
 }
