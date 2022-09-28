@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using DefaultNamespace;
 using PathFinding.Scripts.UIManagers;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -14,6 +12,9 @@ public class MapGenerator : MonoBehaviour
     [SerializeField]
     MapDataScriptableObject m_MapData;
 
+    [SerializeField]
+    GameObject m_MapBoundingCollider;
+    
     [SerializeField]
     float m_OffsetX;
 
@@ -76,8 +77,33 @@ public class MapGenerator : MonoBehaviour
             }
         }
         
+        SetBoundingColliders(width, height);
+        
         colliderTileMap.SetObjects(colliderTiles.Item1.ToArray(), colliderTiles.Item2.ToArray());
         pathTilemap.SetTiles(pathTiles.Item1.ToArray(),pathTiles.Item2.ToArray());
+    }
+
+    void SetBoundingColliders(int width, int height)
+    {
+        var east = Instantiate(m_MapBoundingCollider, m_GridData.boundingBoxContainer.transform);
+        var eastAvg = new Vector3Int(-1, height, 0);
+        east.transform.localScale = new Vector3(1, height, 1);
+        east.transform.position = PathfindingManager.tilemapGrid.CellToWorld(eastAvg);
+        
+        var south = Instantiate(m_MapBoundingCollider, m_GridData.boundingBoxContainer.transform);
+        var southAvg = new Vector3Int(-1, -1, 0);
+        south.transform.localScale = new Vector3(width, 1, 1);
+        south.transform.position = PathfindingManager.tilemapGrid.CellToWorld(southAvg);
+        
+        var north = Instantiate(m_MapBoundingCollider, m_GridData.boundingBoxContainer.transform);
+        var northAvg = new Vector3Int(width, -1, 0);
+        north.transform.localScale = new Vector3(width, 1, 1);
+        north.transform.position = PathfindingManager.tilemapGrid.CellToWorld(northAvg);
+        
+        var west = Instantiate(m_MapBoundingCollider, m_GridData.boundingBoxContainer.transform);
+        var westAvg = new Vector3Int(-1, -1, 0);
+        west.transform.localScale = new Vector3(1, height, 1);
+        west.transform.position = PathfindingManager.tilemapGrid.CellToWorld(westAvg);
     }
 
     float GetPerlinNoise(int x, int y)

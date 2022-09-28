@@ -49,8 +49,6 @@ public class WallBuilder : MonoBehaviour
             m_WallList.Add(newWall);
             
             m_ColliderTileMap.SetObject(tilePos, wallObject);
-
-            Debug.Log(tilePos);
         }
         
         if (Mouse.current.rightButton.wasPressedThisFrame)
@@ -69,8 +67,6 @@ public class WallBuilder : MonoBehaviour
             m_WallList.Remove(wallToRemove);
             
             m_ColliderTileMap.SetObject(tilePos, null);
-            
-            Debug.Log(tilePos);
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace DefaultNamespace
@@ -8,6 +7,8 @@ namespace DefaultNamespace
     public class ObjectMap : MonoBehaviour
     {
         Dictionary<Vector3Int, GameObject> m_Objects = new Dictionary<Vector3Int, GameObject>();
+
+        public Dictionary<Vector3Int, GameObject> mapSet => m_Objects;
 
         public event Action<Vector3Int[], GameObject[]> ObjectMapEdited;
 
