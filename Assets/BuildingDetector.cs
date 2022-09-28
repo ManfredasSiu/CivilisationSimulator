@@ -1,14 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Assets.Grid.Scripts.Map.Logic;
 using DefaultNamespace;
-using JetBrains.Annotations;
 using PathFinding.Scripts.UIManagers;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 public class BuildingDetector : MonoBehaviour
 {
@@ -151,7 +148,7 @@ public class BuildingDetector : MonoBehaviour
         if (!m_Rooms.Any(room => room.isOutside))
         {
             var outsideCells = m_Grid.GetAllCellList().Where(cell => cell.isWalkable && !cell.isDoor && !m_Rooms.Any(room => room.ContainsCell(cell)));
-            var boundingWalls = m_Grid.GetAllCellList().Where(wall => !wall.isWalkable || wall.isDoor && !m_Rooms.Any(room => room.ContainsWall(wall)));
+            var boundingWalls = m_Grid.GetAllCellList().Where(wall => (!wall.isWalkable || wall.isDoor) && !m_Rooms.Any(room => room.ContainsWall(wall)));
 
             var outsideRoom = new Room();
             outsideRoom.isOutside = true;
@@ -170,6 +167,8 @@ public class BuildingDetector : MonoBehaviour
                 }
             }
 
+            outsideRoom.AssignWalls(boundingWalls);
+            
             m_Rooms.Add(outsideRoom);
         }
     }

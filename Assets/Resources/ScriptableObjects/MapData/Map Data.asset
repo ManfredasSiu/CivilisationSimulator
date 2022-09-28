@@ -15,7 +15,10 @@ MonoBehaviour:
   mapTiles:
   - percentage: 0.205
     tile: {fileID: 11400000, guid: abc724add534f4e48b02ab31e524f01f, type: 2}
+    prefab: {fileID: 0}
   - percentage: 0.59
     tile: {fileID: 11400000, guid: 01a43b93edea72d47a79db52bf654e61, type: 2}
+    prefab: {fileID: 0}
   - percentage: 1
     tile: {fileID: 11400000, guid: 9b32b4c3aff1f88469db36deb761314d, type: 2}
+    prefab: {fileID: 340385817364942784, guid: 5386711c0703cf4449a8472ebe6045e6, type: 3}

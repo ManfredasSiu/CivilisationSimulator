@@ -13,13 +13,13 @@ public class WallBuilder : MonoBehaviour
     [SerializeField]
     MapGridDataManager m_MapData;
     
-    public TileBase WallTile;
+    public GameObject wallTile;
 
     List<Wall> m_WallList;
 
     Camera m_MainCam;
     
-    Tilemap m_ColliderTileMap => m_MapData.colliderTilemap;
+    ObjectMap m_ColliderTileMap => m_MapData.colliderObjectContainer;
     
     void Start()
     {
@@ -35,18 +35,20 @@ public class WallBuilder : MonoBehaviour
 
             var tilePos = new Vector3Int(Mathf.FloorToInt(mousePos.y), Mathf.FloorToInt(mousePos.x), 0);
 
-            if (m_ColliderTileMap.HasTile(tilePos))
+            if (m_ColliderTileMap.HasObject(tilePos))
             {
                 return;
             }
 
-            var newWall = new Wall(tilePos, WallTile);
+            var wallObject = Instantiate(wallTile, m_MapData.colliderObjectContainer.transform);
+            
+            wallObject.transform.position = PathfindingManager.tilemapGrid.CellToWorld(tilePos);
+
+            var newWall = new Wall(tilePos, wallObject);
             
             m_WallList.Add(newWall);
             
-            m_ColliderTileMap.SetTile(tilePos, WallTile);
-            
-            Debug.Log(tilePos);
+            m_ColliderTileMap.SetObject(tilePos, wallObject);
         }
         
         if (Mouse.current.rightButton.wasPressedThisFrame)
@@ -54,8 +56,8 @@ public class WallBuilder : MonoBehaviour
             var mousePos = m_MainCam.ScreenToWorldPoint(Mouse.current.position.ReadValue());
 
             var tilePos = new Vector3Int(Mathf.FloorToInt(mousePos.y), Mathf.FloorToInt(mousePos.x), 0);
-
-            if (!m_ColliderTileMap.HasTile(tilePos) && m_WallList.All(wall => wall.tilePos != tilePos))
+            
+            if (!m_ColliderTileMap.HasObject(tilePos) && m_WallList.All(wall => wall.tilePos != tilePos))
             {
                 return;
             }
@@ -64,9 +66,7 @@ public class WallBuilder : MonoBehaviour
             
             m_WallList.Remove(wallToRemove);
             
-            m_ColliderTileMap.SetTile(tilePos, null);
-            
-            Debug.Log(tilePos);
+            m_ColliderTileMap.SetObject(tilePos, null);
         }
     }
 }
