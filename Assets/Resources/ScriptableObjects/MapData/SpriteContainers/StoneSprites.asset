@@ -16,7 +16,7 @@ MonoBehaviour:
   m_AloneSprite: {fileID: 21300000, guid: 5375a05bf5d4c2e479f80f32887dde0f, type: 3}
   m_DownSprite: {fileID: 21300000, guid: 5f6bc1b298dfd5447ae9f1886773976c, type: 3}
   m_DownRightSprite: {fileID: 21300000, guid: 0e6e4c64d93f2c14d8189c8c11f8a7de, type: 3}
-  m_DownLeftSprite: {fileID: 21300000, guid: 0f072c22f69ee064abe3e1cece239b35, type: 3}
+  m_DownLeftSprite: {fileID: 21300000, guid: 41ce7916a8e8e1d43a101a2f8258e4d2, type: 3}
   m_UpSprite: {fileID: 21300000, guid: 8669fd54e4a82b443bf28c8804890ba1, type: 3}
   m_UpRightSprite: {fileID: 21300000, guid: a8049b69419e3af44901868ee1027f77, type: 3}
   m_UpLeftSprite: {fileID: 21300000, guid: 0f072c22f69ee064abe3e1cece239b35, type: 3}

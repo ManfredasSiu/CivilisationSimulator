@@ -41,7 +41,7 @@ public class InGameDisplay : MonoBehaviour
                 healthBarTransform.position = new Vector3(objectHit.position.x + objectHit.localScale.x/2, objectHit.position.y + objectHit.localScale.y * 0.8f);
                 
                 Debug.Log(m_HealthBar.fillAmount);
-                m_HealthBar.fillAmount = 0.2f; // objectData.GetHealthPercentage();
+                m_HealthBar.fillAmount = objectData.GetHealthPercentage();
             }
             else
             {
