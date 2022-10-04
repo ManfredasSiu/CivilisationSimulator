@@ -178,8 +178,8 @@ MonoBehaviour:
   m_ScreenX: 0.5
   m_ScreenY: 0.5
   m_CameraDistance: 10
-  m_DeadZoneWidth: 0
-  m_DeadZoneHeight: 0
+  m_DeadZoneWidth: 0.007291665
+  m_DeadZoneHeight: 0.009259258
   m_DeadZoneDepth: 0
   m_UnlimitedSoftZone: 0
   m_SoftZoneWidth: 0.8
@@ -494,7 +494,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 472526707}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81d10df71c234d7e81e7a0bab359e72a, type: 3}
+  m_Script: {fileID: 11500000, guid: dfd6adbfb23cd05429f3827820708e1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_ColliderObjectContainer: {fileID: 2101545808}
@@ -578,7 +578,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 611050032}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.183, y: 1.796, z: -10}
+  m_LocalPosition: {x: 1.183, y: 1.7959998, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 97010329}
@@ -592,7 +592,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 611050032}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8d6d5c0727805de448bb49c1d824f9bd, type: 3}
   m_Name: 
@@ -1031,7 +1031,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1059257332}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.183, y: 1.796, z: -10}
+  m_LocalPosition: {x: 1.183, y: 1.7959998, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

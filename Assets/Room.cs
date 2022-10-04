@@ -39,6 +39,15 @@ namespace DefaultNamespace
         public bool ContainsWall(PathNode wall)
         {
             return m_RoomWalls.Any(roomWall => roomWall == wall);
+            
+            for (int i = 0; i < m_RoomWalls.Count; i++)
+            {
+                if (m_RoomWalls[i] == wall)
+                    return true;
+            }
+
+            return false;
+            
         }
         
         public List<PathNode> GetOutsideWalls()
