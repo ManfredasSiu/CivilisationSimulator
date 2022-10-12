@@ -14,6 +14,7 @@ public class WallBuilder : MonoBehaviour
     MapGridDataManager m_MapData;
     
     public GameObject wallTile;
+    public GameObject doorTile;
 
     List<Wall> m_WallList;
 
@@ -48,7 +49,7 @@ public class WallBuilder : MonoBehaviour
             
             m_WallList.Add(newWall);
             
-            m_ColliderTileMap.SetObject(tilePos, wallObject);
+             m_ColliderTileMap.SetObject(tilePos, wallObject);
         }
         
         if (Mouse.current.rightButton.wasPressedThisFrame)
@@ -67,6 +68,28 @@ public class WallBuilder : MonoBehaviour
             m_WallList.Remove(wallToRemove);
             
             m_ColliderTileMap.SetObject(tilePos, null);
+        }
+
+        if (Keyboard.current.spaceKey.wasPressedThisFrame)
+        {
+            var mousePos = m_MainCam.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+
+            var tilePos = new Vector3Int(Mathf.FloorToInt(mousePos.y), Mathf.FloorToInt(mousePos.x), 0);
+
+            if (m_ColliderTileMap.HasObject(tilePos))
+            {
+                return;
+            }
+
+            var wallObject = Instantiate(doorTile, m_MapData.colliderObjectContainer.transform);
+            
+            wallObject.transform.position = PathfindingManager.tilemapGrid.CellToWorld(tilePos);
+
+            var newWall = new Wall(tilePos, wallObject);
+            
+            m_WallList.Add(newWall);
+            
+            m_ColliderTileMap.SetObject(tilePos, wallObject);
         }
     }
 }

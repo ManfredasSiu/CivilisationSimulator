@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13f731e27db7467bb44862efb2d774ba, type: 3}
+  m_Name: WoodenDoorContainer
+  m_EditorClassIdentifier: 
+  m_CrossSprite: {fileID: 0}
+  m_AloneSprite: {fileID: 21300000, guid: 462cd51ca8cc52b4b9dcf4f3f76cb217, type: 3}
+  m_DownSprite: {fileID: 0}
+  m_DownRightSprite: {fileID: 0}
+  m_DownLeftSprite: {fileID: 0}
+  m_UpSprite: {fileID: 0}
+  m_UpRightSprite: {fileID: 0}
+  m_UpLeftSprite: {fileID: 0}
+  m_RightSprite: {fileID: 0}
+  m_LeftSprite: {fileID: 0}

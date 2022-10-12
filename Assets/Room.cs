@@ -28,18 +28,28 @@ namespace DefaultNamespace
         
         public bool ContainsCell(int x, int y)
         {
-            return m_RoomCells.Any(cell => cell.x == x && cell.y == y);
+            for (int i = 0; i < m_RoomCells.Count; i++)
+            {
+                if (m_RoomCells[i].x == x && m_RoomCells[i].y == y)
+                    return true;
+            }
+            
+            return false;
         }
         
         public bool ContainsCell(PathNode cell)
         {
-            return m_RoomCells.Any(roomCell => roomCell == cell);
+            for (int i = 0; i < m_RoomCells.Count; i++)
+            {
+                if (m_RoomCells[i] == cell)
+                    return true;
+            }
+            
+            return false;
         }
         
         public bool ContainsWall(PathNode wall)
         {
-            return m_RoomWalls.Any(roomWall => roomWall == wall);
-            
             for (int i = 0; i < m_RoomWalls.Count; i++)
             {
                 if (m_RoomWalls[i] == wall)
@@ -47,7 +57,6 @@ namespace DefaultNamespace
             }
 
             return false;
-            
         }
         
         public List<PathNode> GetOutsideWalls()

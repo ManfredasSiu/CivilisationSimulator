@@ -70,7 +70,6 @@ public class ObjectSpriteManager : MonoBehaviour
                 alreadyUpdatedPositions.Add(currentNeighborPosition);
             }
         }
-        
     }
 
     bool UpdateSprite(Vector3Int position)
@@ -79,72 +78,120 @@ public class ObjectSpriteManager : MonoBehaviour
         {
             return false;
         }
-        
+
+        var objectData = m_MapSet[position].GetComponent<MapObjectData>();
+
+
         var sprites = m_MapSet[position].GetComponent<MapObjectData>().spriteContainer;
         if (sprites == null)
         {
             return false;
         }
-        
-        var renderer = m_MapSet[position].GetComponent<SpriteRenderer>();
+
+        SpriteSetter spriteSetter = m_MapSet[position].GetComponent<SpriteSetter>();
+        DoorController doorController = null;
+
+        if (objectData.objectType == MapObjectType.Pathway)
+        {
+            doorController = m_MapSet[position].GetComponent<DoorController>();
+        }
 
         var corners = new List<Vector3Int>();
-        corners.Add(new Vector3Int(position.x+1, position.y, position.z));
-        corners.Add(new Vector3Int(position.x, position.y+1, position.z));
-        corners.Add(new Vector3Int(position.x, position.y-1, position.z));
-        corners.Add(new Vector3Int(position.x-1, position.y, position.z));
-        
+        corners.Add(new Vector3Int(position.x + 1, position.y, position.z));
+        corners.Add(new Vector3Int(position.x, position.y + 1, position.z));
+        corners.Add(new Vector3Int(position.x, position.y - 1, position.z));
+        corners.Add(new Vector3Int(position.x - 1, position.y, position.z));
+
         if (corners.All(corner => m_MapSet.ContainsKey(corner)))
         {
-            renderer.sprite = sprites.crossSprite;
+            if (doorController)
+            {
+                doorController.SetDoorPlacementHorizontal(true);
+                return true;
+            }
+            
+            spriteSetter.SetSprites(sprites.crossSprite);
         }
         else if (m_MapSet.ContainsKey(corners[0]) && m_MapSet.ContainsKey(corners[3]))
         {
+            if (doorController)
+            {
+                doorController.SetDoorPlacementHorizontal(false);
+                return true;
+            }           
+            
             if (m_MapSet.ContainsKey(corners[2]))
             {
-                renderer.sprite = sprites.rightSprite;
+                spriteSetter.SetSprites(sprites.rightSprite);
             }
+
             if (m_MapSet.ContainsKey(corners[1]))
             {
-                renderer.sprite = sprites.leftSprite;
+                spriteSetter.SetSprites(sprites.leftSprite);
             }
         }
         else if (m_MapSet.ContainsKey(corners[1]) && m_MapSet.ContainsKey(corners[2]))
         {
-            if(m_MapSet.ContainsKey(corners[3]))
+            if (doorController)
             {
-                renderer.sprite = sprites.upSprite;
+                doorController.SetDoorPlacementHorizontal(true);
+                return true;
+            }    
+            
+            if (m_MapSet.ContainsKey(corners[3]))
+            {
+                spriteSetter.SetSprites(sprites.upSprite);
             }
             else if (m_MapSet.ContainsKey(corners[0]))
             {
-                renderer.sprite = sprites.downSprite;
+                spriteSetter.SetSprites(sprites.downSprite);
             }
         }
 
         else if (m_MapSet.ContainsKey(corners[2]))
         {
+            if (doorController)
+            {
+                doorController.SetDoorPlacementHorizontal(true);
+                return true;
+            }
+            
             if (m_MapSet.ContainsKey(corners[0]))
             {
-                renderer.sprite = sprites.downRightSprite;
+                spriteSetter.SetSprites(sprites.downRightSprite);
             }
             else if (m_MapSet.ContainsKey(corners[3]))
             {
-                renderer.sprite = sprites.upRightSprite;
+                spriteSetter.SetSprites(sprites.upRightSprite);
             }
         }
-        
+
         else if (m_MapSet.ContainsKey(corners[1]))
         {
+            if (doorController)
+            {
+                doorController.SetDoorPlacementHorizontal(true);
+                return true;
+            }
             if (m_MapSet.ContainsKey(corners[0]))
             {
-                renderer.sprite = sprites.downLeftSprite;
+                spriteSetter.SetSprites(sprites.downLeftSprite);
             }
             else if (m_MapSet.ContainsKey(corners[3]))
             {
-                renderer.sprite = sprites.upLeftSprite;
+                spriteSetter.SetSprites(sprites.upLeftSprite);
             }
         }
-        
+        else
+        {
+            if (doorController)
+            {
+                doorController.SetDoorPlacementHorizontal(true);
+                return true;
+            }
+            spriteSetter.SetSprites(sprites.aloneSprite);
+        }
+
         return true;
     }
 }
